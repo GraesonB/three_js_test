@@ -8,6 +8,7 @@ class ShaderPractice {
   
     async initialize() {
       this.threejs_ = new THREE.WebGLRenderer({antialias: true});
+      this.threejs_.setClearColor( 0x0A0F14 );
       document.body.appendChild(this.threejs_.domElement);
   
       window.addEventListener('resize', () => {
@@ -37,15 +38,17 @@ class ShaderPractice {
 
       const material = new THREE.ShaderMaterial({
         uniforms: {
-            time: {vlaue: 0.0}
+            time: {value: 0.0},
+            fresnelMod: {value: 60.0}
         },
         vertexShader: await vsh.text(),
         fragmentShader: await fsh.text()
       });
   
-      const geometry = new THREE.IcosahedronGeometry(3, 50);
+      const geometry = new THREE.IcosahedronGeometry(3, 100);
       this.sphere = new THREE.Mesh(geometry, material);
-      this.sphere.position.set(0.0, 0.0, 0.0);
+      this.sphere.position.set(0.0, 0.0, -12.0);
+      this.sphere.rotation.x = 1.6; // 1.6 for loading
       this.scene_.add(this.sphere);
       this.totalTime_ = 0.0
 
@@ -62,6 +65,15 @@ class ShaderPractice {
         }
         this.step_(t - this.previousRAF_);
         this.threejs_.render(this.scene_, this.camera_);
+        if (this.totalTime_ > 3 && this.sphere.rotation.x > 1) {
+            this.sphere.rotation.x -= 0.01;
+        }
+        // if (this.totalTime_ > 3 && this.sphere.position.y < 2) {
+        //     this.sphere.position.y += 0.04;
+        // }
+        if (this.totalTime_ > 2 && this.sphere.material.uniforms.fresnelMod.value > 6.0) {
+            this.sphere.material.uniforms.fresnelMod.value -= 0.5;
+        }
         this.raf_();
         this.previousRAF_ = t;
       });
