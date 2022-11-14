@@ -34,7 +34,7 @@ class ShaderPractice {
       this.scene_ = new THREE.Scene();
   
       this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-      this.camera_.position.set(0, 0, 30);
+      this.camera_.position.set(0, 0, 25);
   
       await this.setupProject_();
       
@@ -89,13 +89,13 @@ class ShaderPractice {
         this.onWindowResize_();
         this.step_(t - this.previousRAF_);
         this.threejs_.render(this.scene_, this.camera_);
-        if (this.totalTime_ > 3 && this.sphere.rotation.x > 1.0) {
+        if (this.totalTime_ > 3.0 && this.sphere.rotation.x > 1.0) {
             this.sphere.rotation.x -= 0.01;
         }
         if (this.totalTime_ > 3.75) {
             nameFadeIn(document.querySelector('#name'));
         }
-        if (this.totalTime_ > 2 && this.sphere.material.uniforms.fresnelMod.value > 6.0) {
+        if (this.totalTime_ > 2.0 && this.sphere.material.uniforms.fresnelMod.value > 3.0) {
             this.sphere.material.uniforms.fresnelMod.value -= 0.5;
         }
         this.raf_();
