@@ -8,22 +8,64 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #0A0F14;
 
-  font-synthesis: none;
+  /* font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; */
+}
+
+html {
+    background-color: #0A0F14;
 }
 
 * {
     margin: 0;
 }
 
+h1.letter {
+    /* visibility: hidden; */
+    color: #DCE6D2;
+    font-size: 4rem;
+    visibility: hidden;
+}
 
-body {
-    position: absolute;
-    left: 0;
+#name {
+    display: flex;
+}
+
+.fade-in {
+    animation: fadeIn 2s ease-in;
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0%;
+    }
+    to {
+        opcaity: 100%;
+    }
+}
+
+canvas {
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    mix-blend-mode:difference;
+}
+
+main {
+    background-color: #0A0F14;
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
 }

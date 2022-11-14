@@ -2,15 +2,31 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import './style.css';
 
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function nameFadeIn(name) {
+    const letters = name.getElementsByClassName('letter');
+    for (const letter of letters) {
+        letter.style.visibility = 'visible';
+        letter.classList.add('fade-in');
+        await wait(50);
+    }
+}
+
 class ShaderPractice {
     constructor() {
     }
   
     async initialize() {
-      this.threejs_ = new THREE.WebGLRenderer({antialias: true});
-      this.threejs_.setClearColor( 0x0A0F14 );
-      document.body.appendChild(this.threejs_.domElement);
-  
+      this.threejs_ = new THREE.WebGLRenderer(
+        {
+            antialias: true,
+            canvas: document.querySelector('#sphere'),
+            alpha: true
+        });
+      this.threejs_.setClearColor( 0x141E28 );
+      //document.body.appendChild(this.threejs_.domElement);
+        
       window.addEventListener('resize', () => {
         this.onWindowResize_();
       }, false);
@@ -18,11 +34,11 @@ class ShaderPractice {
       this.scene_ = new THREE.Scene();
   
       this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-      this.camera_.position.set(0, 0, 30);
+      this.camera_.position.set(0, 0, 15);
 
-      const controls = new OrbitControls(this.camera_, this.threejs_.domElement);
-      controls.target.set(0, 0, 0);
-      controls.update();
+      //const controls = new OrbitControls(this.camera_, this.threejs_.domElement);
+      //controls.target.set(0, 0, 0);
+      //controls.update();
   
       await this.setupProject_();
       
@@ -45,7 +61,7 @@ class ShaderPractice {
         fragmentShader: await fsh.text()
       });
   
-      const geometry = new THREE.IcosahedronGeometry(3, 100);
+      const geometry = new THREE.IcosahedronGeometry(3, 50);
       this.sphere = new THREE.Mesh(geometry, material);
       this.sphere.position.set(0.0, 0.0, -12.0);
       this.sphere.rotation.x = 1.6; // 1.6 for loading
@@ -68,10 +84,10 @@ class ShaderPractice {
         if (this.totalTime_ > 3 && this.sphere.rotation.x > 1) {
             this.sphere.rotation.x -= 0.01;
         }
-        // if (this.totalTime_ > 3 && this.sphere.position.y < 2) {
-        //     this.sphere.position.y += 0.04;
-        // }
-        if (this.totalTime_ > 2 && this.sphere.material.uniforms.fresnelMod.value > 6.0) {
+        if (this.totalTime_ > 3.75) {
+            nameFadeIn(document.querySelector('#name'));
+        }
+        if (this.totalTime_ > 2 && this.sphere.material.uniforms.fresnelMod.value > 8.0) {
             this.sphere.material.uniforms.fresnelMod.value -= 0.5;
         }
         this.raf_();
