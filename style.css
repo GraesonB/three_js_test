@@ -32,6 +32,10 @@ h1.letter {
     visibility: hidden;
 }
 
+h1.first {
+    font-weight:300;
+}
+
 #name {
     display: flex;
 }

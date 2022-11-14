@@ -13,10 +13,10 @@ async function nameFadeIn(name) {
     }
 }
 
+
 class ShaderPractice {
     constructor() {
     }
-  
     async initialize() {
       this.threejs_ = new THREE.WebGLRenderer(
         {
@@ -35,10 +35,6 @@ class ShaderPractice {
   
       this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
       this.camera_.position.set(0, 0, 15);
-
-      //const controls = new OrbitControls(this.camera_, this.threejs_.domElement);
-      //controls.target.set(0, 0, 0);
-      //controls.update();
   
       await this.setupProject_();
       
@@ -55,19 +51,30 @@ class ShaderPractice {
       const material = new THREE.ShaderMaterial({
         uniforms: {
             time: {value: 0.0},
-            fresnelMod: {value: 60.0}
+            fresnelMod: {value: 60.0},
+            mouseCoords: {value: new THREE.Vector2(0.0, 0.0)}
         },
         vertexShader: await vsh.text(),
         fragmentShader: await fsh.text()
       });
   
-      const geometry = new THREE.IcosahedronGeometry(3, 50);
+      const geometry = new THREE.IcosahedronGeometry(8, 150);
       this.sphere = new THREE.Mesh(geometry, material);
       this.sphere.position.set(0.0, 0.0, -12.0);
       this.sphere.rotation.x = 1.6; // 1.6 for loading
       this.scene_.add(this.sphere);
-      this.totalTime_ = 0.0
+      this.totalTime_ = 0.0;
+      this.mouse = new THREE.Vector2(0.0, 0.0);
 
+      document.addEventListener('mousemove', this.onMouseMove);
+
+    }
+
+    onMouseMove = (e) => {
+        this.mouse.setX((e.clientX - window.innerWidth / 2));
+        this.mouse.setY(-(e.clientY - window.innerHeight / 2));
+
+        this.sphere.material.uniforms.mouseCoords.value = this.mouse;
     }
   
     onWindowResize_() {
@@ -79,6 +86,7 @@ class ShaderPractice {
         if (this.previousRAF_ === null ) {
             this.previousRAF_ = t;
         }
+        this.onWindowResize_();
         this.step_(t - this.previousRAF_);
         this.threejs_.render(this.scene_, this.camera_);
         if (this.totalTime_ > 3 && this.sphere.rotation.x > 1) {

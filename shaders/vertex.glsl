@@ -2,6 +2,7 @@ varying vec2 vUvs;
 varying vec3 vNormal;
 varying vec3 vPosition;
 uniform float time;
+uniform vec2 mouseCoords;
 
 float inverseLerp(float v, float min, float max) {
     return (v - min) / (max - min);
@@ -18,6 +19,7 @@ void main() {
     float t = sin(localPosition.y * 7.0 + time * 5.0);
     t = remap(t, -1.0, 1.0, 0.0, 0.5);
     localPosition += normal * t;
+    localPosition *= max(0.0, dot(normal, vec3(normalize(mouseCoords), 0.0)));
     vUvs = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(localPosition, 1.0);
 
