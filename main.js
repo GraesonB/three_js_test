@@ -34,7 +34,7 @@ class ShaderPractice {
       this.scene_ = new THREE.Scene();
   
       this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-      this.camera_.position.set(0, 0, 15);
+      this.camera_.position.set(0, 0, 30);
   
       await this.setupProject_();
       
@@ -58,7 +58,7 @@ class ShaderPractice {
         fragmentShader: await fsh.text()
       });
   
-      const geometry = new THREE.IcosahedronGeometry(8, 150);
+      const geometry = new THREE.IcosahedronGeometry(8, 100);
       this.sphere = new THREE.Mesh(geometry, material);
       this.sphere.position.set(0.0, 0.0, -12.0);
       this.sphere.rotation.x = 1.6; // 1.6 for loading
@@ -89,13 +89,13 @@ class ShaderPractice {
         this.onWindowResize_();
         this.step_(t - this.previousRAF_);
         this.threejs_.render(this.scene_, this.camera_);
-        if (this.totalTime_ > 3 && this.sphere.rotation.x > 1) {
+        if (this.totalTime_ > 3 && this.sphere.rotation.x > 1.0) {
             this.sphere.rotation.x -= 0.01;
         }
         if (this.totalTime_ > 3.75) {
             nameFadeIn(document.querySelector('#name'));
         }
-        if (this.totalTime_ > 2 && this.sphere.material.uniforms.fresnelMod.value > 8.0) {
+        if (this.totalTime_ > 2 && this.sphere.material.uniforms.fresnelMod.value > 6.0) {
             this.sphere.material.uniforms.fresnelMod.value -= 0.5;
         }
         this.raf_();

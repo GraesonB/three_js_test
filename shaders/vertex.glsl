@@ -16,10 +16,10 @@ float remap(float v, float inMin, float inMax, float outMin, float outMax) {
 
 void main() {	
     vec3 localPosition = vec3(position);
-    float t = sin(localPosition.y * 7.0 + time * 5.0);
+    float t = sin(localPosition.y * 5.0 + time * 5.0);
     t = remap(t, -1.0, 1.0, 0.0, 0.5);
     localPosition += normal * t;
-    localPosition *= max(0.0, dot(normal, vec3(normalize(mouseCoords), 0.0)));
+    localPosition += normal * pow(max(0.0, dot(normal, vec3(normalize(mouseCoords), 0.0))), 8.0);
     vUvs = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(localPosition, 1.0);
 
