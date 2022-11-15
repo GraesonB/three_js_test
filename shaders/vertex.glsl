@@ -42,7 +42,7 @@ float remap(float v, float inMin, float inMax, float outMin, float outMax) {
 
 void main() {	
     vec3 localPosition = vec3(position);
-    float t = sin(localPosition.y * 5.0 + time * 5.0);
+    float t = sin(localPosition.y * 5.0 + time * 3.0);
     t = remap(t, -1.0, 1.0, 0.0, 0.5);
     vec3 coords = vec3(uv, time);
     float noiseSample = remap(noise(coords), -1.0, 1.0, 0.0, 1.0);

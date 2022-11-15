@@ -11,8 +11,10 @@ async function nameFadeIn(name) {
         letter.classList.add('fade-in');
         await wait(50);
     }
-}
-
+    const subheader = document.querySelector('.subheader');
+    subheader.style.visibility = 'visible';
+    subheader.classList.add('fade-in');
+  }
 
 class ShaderPractice {
     constructor() {
@@ -34,7 +36,7 @@ class ShaderPractice {
       this.scene_ = new THREE.Scene();
   
       this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-      this.camera_.position.set(0, 0, 25);
+      this.camera_.position.set(0, 0, 15);
   
       await this.setupProject_();
       
@@ -58,10 +60,15 @@ class ShaderPractice {
         fragmentShader: await fsh.text()
       });
   
-      const geometry = new THREE.IcosahedronGeometry(8, 100);
+      const geometry = new THREE.IcosahedronGeometry(6, 75);
       this.sphere = new THREE.Mesh(geometry, material);
       this.sphere.position.set(0.0, 0.0, -12.0);
       this.sphere.rotation.x = 1.6; // 1.6 for loading
+
+      const boxGeo = new THREE.BoxGeometry(6, 4);
+      this.box = new THREE.Mesh(boxGeo, material);
+      this.box.position.set(0.0,-12.0, -12);
+      this.scene_.add(this.boxm);
       this.scene_.add(this.sphere);
       this.totalTime_ = 0.0;
       this.mouse = new THREE.Vector2(0.0, 0.0);
@@ -71,10 +78,12 @@ class ShaderPractice {
     }
 
     onMouseMove = (e) => {
-        this.mouse.setX((e.clientX - window.innerWidth / 2));
-        this.mouse.setY(-(e.clientY - window.innerHeight / 2));
-
-        this.sphere.material.uniforms.mouseCoords.value = this.mouse;
+        if (this.totalTime_ > 3.4) {
+          this.mouse.setX((e.clientX - window.innerWidth / 2));
+          this.mouse.setY(-(e.clientY - window.innerHeight / 2));
+  
+          this.sphere.material.uniforms.mouseCoords.value = this.mouse;
+        }
     }
   
     onWindowResize_() {
@@ -95,7 +104,7 @@ class ShaderPractice {
         if (this.totalTime_ > 3.75) {
             nameFadeIn(document.querySelector('#name'));
         }
-        if (this.totalTime_ > 2.0 && this.sphere.material.uniforms.fresnelMod.value > 3.0) {
+        if (this.totalTime_ > 2.0 && this.sphere.material.uniforms.fresnelMod.value > 6.5) {
             this.sphere.material.uniforms.fresnelMod.value -= 0.5;
         }
         this.raf_();
